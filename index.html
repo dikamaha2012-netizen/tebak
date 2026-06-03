@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tebak Angka Online</title>
+  <style>
+    body {font-family: sans-serif; text-align: center; background: #16213e; color: white; padding: 30px;}
+    h1 {color: #00ff88;}
+    button, input {padding: 12px 20px; margin: 5px; font-size: 18px; border-radius: 10px; border: none; cursor: pointer;}
+    button {background: #0f3460; color: white;}
+    button:hover {background: #533483;}
+    .level-btn {background: #e94560;}
+    #game {display: none;}
+    #pesan {margin-top: 20px; font-size: 20px;}
+  </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+  <h1>🎯 Tebak Angka Online</h1>
+  <div id="menu">
+    <p>Pilih level dulu:</p>
+    <button class="level-btn" onclick="mulai(20, 5)">Easy 1-20</button>
+    <button class="level-btn" onclick="mulai(100, 7)">Hard 1-100</button>
+  </div>
+  <div id="game">
+    <p>Level: <span id="level"></span> | Sisa nyawa: <span id="nyawa">0</span></p>
+    <input type="number" id="tebakan" placeholder="Angka...">
+    <button onclick="cek()">Tebak!</button>
+    <button onclick="reset()">Ganti Level</button>
+    <p id="pesan">Ayo tebak!</p>
+  </div>
+  <script>
+    let angka, nyawa, max;
+    function mulai(m, n) {
+      max = m; nyawa = n;
+      angka = Math.floor(Math.random() * max) + 1;
+      document.getElementById('menu').style.display = 'none';
+      document.getElementById('game').style.display = 'block';
+      document.getElementById('level').innerText = `1-${max}`;
+      document.getElementById('nyawa').innerText = nyawa;
+      document.getElementById('pesan').innerText = `Tebak angka 1-${max}`;
+    }
+    function cek() {
+      let tebakan = parseInt(document.getElementById('tebakan').value);
+      let pesan = document.getElementById('pesan');
+      if (!tebakan) return;
+      if (tebakan == angka) {
+        pesan.innerHTML = `Selamat kamu menang! 🎉 Jawabannya ${angka}`;
+        pesan.style.color = "#00ff88";
+        document.querySelector('#game button').disabled = true;
+      } else if (tebakan < angka) {pesan.innerHTML = "Terlalu kecil ⬆️"; nyawa--;}
+      else {pesan.innerHTML = "Terlalu besar ⬇️"; nyawa--;}
+      document.getElementById('nyawa').innerText = nyawa;
+      document.getElementById('tebakan').value = "";
+      if (nyawa == 0 && tebakan != angka) {
+        pesan.innerHTML = `Game over 😭 Jawabannya ${angka}`;
+        pesan.style.color = "red";
+        document.querySelector('#game button').disabled = true;
+      }
+    }
+    function reset() {
+      document.getElementById('game').style.display = 'none';
+      document.getElementById('menu').style.display = 'block';
+      document.querySelector('#game button').disabled = false;
+      document.getElementById('pesan').style.color = "white";
+    }
+  </script>
+</body>
+</html>
